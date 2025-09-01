@@ -2,18 +2,16 @@
 FROM maven:3.9.4-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
-# # Copy parent pom first for dependency resolution
-# COPY pom.xml ./
-# COPY apps/pom.xml ./apps/
-# COPY common ./common/
+# Copy all necessary files for Maven multi-module build
+COPY pom.xml ./
+COPY apps/pom.xml ./apps/
+COPY common ./common/
+COPY apps/api-gateway ./apps/api-gateway/
+COPY apps/auth-service ./apps/auth-service/
+COPY apps/patient-record-service ./apps/patient-record-service/
+COPY apps/triage-orchestrator-service ./apps/triage-orchestrator-service/
 
-# # Copy the service specific files
-# COPY pom.xml ./apps/triage-orchestrator-service/
-# COPY src ./apps/triage-orchestrator-service/src/
-
-COPY . .
-
-# Build the application
+# Build only the triage-orchestrator-service module
 RUN mvn clean package -pl apps/triage-orchestrator-service -am -DskipTests
 
 # Runtime stage

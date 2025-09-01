@@ -2,15 +2,6 @@
 FROM maven:3.9.4-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
-# # Copy parent pom first for dependency resolution
-# COPY ../../pom.xml ./
-# COPY ../pom.xml ./apps/
-# COPY ../../common ./common/
-
-# # Copy the service specific files
-# COPY pom.xml ./apps/patient-record-service/
-# COPY src ./apps/patient-record-service/src/
-
 COPY . .
 
 # Build the application
