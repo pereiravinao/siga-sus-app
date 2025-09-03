@@ -1,21 +1,31 @@
 # Build stage
-FROM maven:3.9.4-openjdk-21 AS build
+FROM maven:3.9.4-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copy parent pom first for dependency resolution
-COPY ../../pom.xml ./
-COPY ../pom.xml ./apps/
-COPY ../../common ./common/
+# Install protobuf compiler and dependencies
+RUN apt-get update && apt-get install -y \
+    protobuf-compiler \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy the service specific files
-COPY pom.xml ./apps/api-gateway/
-COPY src ./apps/api-gateway/src/
+# Copy parent pom first for dependency resolution
+COPY pom.xml ./
+COPY apps/pom.xml ./apps/
+COPY common ./common/
+
+# Copy all app modules (needed for Maven build to work)
+COPY apps/api-gateway ./apps/api-gateway/
+COPY apps/auth-service ./apps/auth-service/
+# COPY apps/user-service ./apps/user-service/
+COPY apps/patient-record-service ./apps/patient-record-service/
+COPY apps/triage-orchestrator-service ./apps/triage-orchestrator-service/
+
+# COPY . .
 
 # Build the application
 RUN mvn clean package -pl apps/api-gateway -am -DskipTests
 
 # Runtime stage
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Install curl for health checks

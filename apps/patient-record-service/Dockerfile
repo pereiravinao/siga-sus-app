@@ -1,21 +1,14 @@
 # Build stage
-FROM maven:3.9.4-openjdk-21 AS build
+FROM maven:3.9.4-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
-# Copy parent pom first for dependency resolution
-COPY ../../pom.xml ./
-COPY ../pom.xml ./apps/
-COPY ../../common ./common/
-
-# Copy the service specific files
-COPY pom.xml ./apps/patient-record-service/
-COPY src ./apps/patient-record-service/src/
+COPY . .
 
 # Build the application
 RUN mvn clean package -pl apps/patient-record-service -am -DskipTests
 
 # Runtime stage
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Install curl for health checks

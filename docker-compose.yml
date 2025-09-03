@@ -27,8 +27,8 @@ services:
   # Microservices
   api-gateway:
     build:
-      context: ./apps/api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/api-gateway/Dockerfile
     container_name: siga-sus-api-gateway
     ports:
       - "8080:8080"
@@ -41,8 +41,8 @@ services:
 
   auth-service:
     build:
-      context: ./apps/auth-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/auth-service/Dockerfile
     container_name: siga-sus-auth-service
     depends_on:
       - postgres
@@ -58,8 +58,8 @@ services:
 
   patient-record-service:
     build:
-      context: ./apps/patient-record-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/patient-record-service/Dockerfile
     container_name: siga-sus-patient-record-service
     ports:
       - "8082:8082"
@@ -70,8 +70,8 @@ services:
 
   triage-orchestrator-service:
     build:
-      context: ./apps/triage-orchestrator-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/triage-orchestrator-service/Dockerfile
     container_name: siga-sus-triage-orchestrator-service
     ports:
       - "8083:8083"
